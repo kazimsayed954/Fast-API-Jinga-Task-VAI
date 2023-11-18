@@ -1,0 +1,36 @@
+<!-- login.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <script>
+        function checkForm() {
+            let username = document.getElementById('username').value;
+            let password = document.getElementById('password').value;
+
+            // Enable or disable the submit button based on whether fields are filled
+            let submitButton = document.getElementById('submit_button');
+            if (username.trim() !== '' && password.trim() !== '') {
+                submitButton.disabled = false;
+            } else {
+                submitButton.disabled = true;
+            }
+        }
+    </script>
+    <link href="{{ url_for('static', path='/login.css') }}" rel="stylesheet">
+
+</head>
+<body>
+    <h1>Login</h1>
+    {% if message %}
+        <p>{{ message }}</p>
+    {% endif %}
+    <form method="post" action="/login" onkeyup="checkForm()" >
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username"><br>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password"><br><br>
+        <input id="submit_button" type="submit" value="Login">
+    </form>
+</body>
+</html>
