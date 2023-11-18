@@ -1,6 +1,16 @@
 # models.py
 import mysql.connector
 
+class Database:
+    @staticmethod
+    def get_db_connection():
+        return mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="password",
+            database="test1_vactic_assesment"
+        )
+
 class User:
     def __init__(self, username, password):
         self.username = username
@@ -8,13 +18,7 @@ class User:
 
     @staticmethod
     def get_user_by_credentials(username, password):
-        db = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="password",
-            database="test1_vactic_assesment"
-        )
-
+        db = Database.get_db_connection()
         cursor = db.cursor()
         cursor.execute("SELECT * FROM users WHERE username = %s AND password = %s", (username, password))
         user = cursor.fetchone()
@@ -25,12 +29,7 @@ class User:
         return None
 
     def save_to_db(self):
-        db = mysql.connector.connect(
-           host="localhost",
-            user="root",
-            password="password",
-            database="test1_vactic_assesment"
-        )
+        db = Database.get_db_connection()
         cursor = db.cursor()
         cursor.execute("INSERT INTO users (username, password) VALUES (%s, %s)", (self.username, self.password))
         db.commit()
@@ -38,12 +37,7 @@ class User:
 
     @staticmethod
     def get_all_users():
-        db = mysql.connector.connect(
-           host="localhost",
-            user="root",
-            password="password",
-            database="test1_vactic_assesment"
-        )
+        db = Database.get_db_connection()
         cursor = db.cursor()
         cursor.execute("SELECT username, password FROM users")
         user_list = [User(username, password) for (username, password) in cursor]
